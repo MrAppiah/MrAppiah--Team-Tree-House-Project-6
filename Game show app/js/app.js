@@ -1,7 +1,7 @@
 // Variables
 const qwerty = document.getElementById("qwerty");
 const phrase = document.getElementById("phrase");
-const missed = 0;
+let missed = 0;
 const startGame = document.querySelector(".btn__reset");
 const overlay = document.getElementById("overlay");
 const tries = document.querySelectorAll("li.tries");
@@ -64,15 +64,32 @@ function checkLetter(button) {
 
 //listen for the onscreen keyboard to be clicked
 qwerty.addEventListener("click", (e) => {
-	if (e.target.tagName == "BUTTON") {
+	if (e.target.tagName === "BUTTON") {
 		e.target.className = "chosen";
 		e.target.disabled = true;
 		let lettersMatch = checkLetter(e.target.textContent);
 
-		if (lettersMatch == null) {
-			tries[missed].setAttribute("src", "images/lostHeart.png");
+		if (lettersMatch === null) {
+			tries[missed].firstElementChild.src = "images/lostHeart.png";
 			missed++;
 		}
 	}
 	checkWin();
 });
+
+// Check if the game has been won or lost
+function checkWin() {
+	const show = document.querySelectorAll("show");
+	const letters = document.querySelectorAll("letter");
+	if (letters.length === show.length) {
+		overlay.classList.add("win");
+		overlay.children[0].textContent = "SUCCESS!";
+		overlay.children[1].textContent = "Restart?";
+		overlay.style.display = "flex";
+	} else if (missed >= 5) {
+		overlay.classList.add("lose");
+		overlay.children[0].textContent = "FAILED!";
+		overlay.children[1].textContent = "Restart?";
+		overlay.style.display = "flex";
+	}
+}
