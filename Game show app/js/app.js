@@ -23,44 +23,31 @@ startGame.addEventListener("click", () => {
 
 // Return a random phrase from an array and generate a random number from 1 and length of the array
 function getRandomPhraseArray(arr) {
-	let randomNumber = Math.floor(Math.random() * arr.length);
+	const randomNumber = Math.floor(Math.random() * arr.length);
 	// assigns index value of array to variable randomPhrase
 	let randomPhrase = arr[randomNumber];
 	// returns randomPhrase split the phrase into a new array of characters
 	return randomPhrase.split("");
 }
 
+// This function loops through an array of characters and adds it to the display
 const phraseArray = getRandomPhraseArray(phrases);
-
-// This function loops through an array of characters and adds it to the display.
 function addPhraseToDisplay(arr) {
 	for (let i = 0; i < phrases.length; i++) {
-		let li = document.createElement("li");
-		li.textContent = arr[i];
-		ul.append(li);
+		let letter = arr[i];
+		const ul = document.querySelector("ul");
+		const li = document.createElement("li");
+		li.textContent = letter;
+		ul.appendChild(li);
 		if (phrases[i].trim().length === 0) {
 			li.className = "space";
 		} else {
 			li.className = "letter";
 		}
 	}
+	return arr;
 }
-
-// Check if the letter is in the phrase
-function checkLetter(button) {
-	const letters = document.querySelectorAll(".letter");
-	let lettersMatch = null;
-
-	for (let i = 0; i < letters.length; i++) {
-		if (letters[i] === arr) {
-			letters[i].className = "show";
-			lettersMatch = letters[i];
-			return lettersMatch;
-		} else {
-			return null;
-		}
-	}
-}
+addPhraseToDisplay(phraseArray);
 
 //listen for the onscreen keyboard to be clicked
 qwerty.addEventListener("click", (e) => {
@@ -76,6 +63,21 @@ qwerty.addEventListener("click", (e) => {
 	}
 	checkWin();
 });
+
+// Check if the letter is in the phrase
+function checkLetter(arr) {
+	const letters = document.querySelectorAll("ul li");
+	let lettersMatch = null;
+
+	for (let i = 0; i < letters.length; i++) {
+		const letterContent = letters[i];
+		if (letterContent === arr.textContent) {
+			letterContent[i].classList.add("show");
+			lettersMatch = arr.textContent;
+		}
+	}
+	return null;
+}
 
 // Check if the game has been won or lost
 function checkWin() {
